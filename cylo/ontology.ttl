@@ -1,57 +1,1380 @@
 @prefix : <http://w3id.org/cylo/ont#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
 @base <http://w3id.org/cylo/ont#> .
 
 <http://w3id.org/cylo/ont#> rdf:type owl:Ontology ;
                              owl:imports <http://www.w3.org/ns/prov-o-20130430> .
 
 #################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/2001/XMLSchema#duration
+xsd:duration rdf:type rdfs:Datatype .
+
+
+#################################################################
 #    Object Properties
 #################################################################
 
-###  http://w3id.org/cylo/ont#gradeFromGradingActivity
-:gradeFromGradingActivity rdf:type owl:ObjectProperty ;
-                          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasGeneratedBy> ;
-                          rdfs:domain :Grade ;
-                          rdfs:range :GradingActivity .
+###  http://w3id.org/cylo/ont#belongedTo
+:belongedTo rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf <http://www.w3.org/ns/prov#actedOnBehalfOf> ;
+            rdfs:domain <http://www.w3.org/ns/prov#Organization> ;
+            rdfs:range <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#belongedToSchool
+:belongedToSchool rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf :belongedTo ;
+                  rdfs:domain :Department ;
+                  rdfs:range :School .
+
+
+###  http://w3id.org/cylo/ont#belongedToUniversity
+:belongedToUniversity rdf:type owl:ObjectProperty ;
+                      rdfs:subPropertyOf :belongedTo ;
+                      rdfs:domain :School ;
+                      rdfs:range :University .
+
+
+###  http://w3id.org/cylo/ont#coveredLearningOutcome
+:coveredLearningOutcome rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#used> ;
+                        rdfs:domain :TeachingActivity ;
+                        rdfs:range :LearningOutcome .
+
+
+###  http://w3id.org/cylo/ont#enrollmentConcerned
+:enrollmentConcerned rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                     rdfs:domain :Enrollment ;
+                     rdfs:range :EducationalOfferings .
+
+
+###  http://w3id.org/cylo/ont#evaluatedProduction
+:evaluatedProduction rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf <http://www.w3.org/ns/prov#used> ;
+                     rdfs:domain :AssessmentActivity ;
+                     rdfs:range :Production .
+
+
+###  http://w3id.org/cylo/ont#feedbackWasAknowledgedBy
+:feedbackWasAknowledgedBy rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAssociatedWith> ;
+                          rdfs:domain :FeedbackAknowledgment ;
+                          rdfs:range <http://www.w3.org/ns/prov#Agent> ;
+                          rdfs:comment "Lie une activité de réception de feedback à l'agent recevant le feedback."@fr ,
+                                       "Links a feedback reception activity to the agent receiving the feedback."@en ,
+                                       "Links a feedback reception activity to the agent receiving the feedback." .
+
+
+###  http://w3id.org/cylo/ont#feedbackWasProvidedBy
+:feedbackWasProvidedBy rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAssociatedWith> ;
+                       rdfs:domain :FeedbackProvision ;
+                       rdfs:range <http://www.w3.org/ns/prov#Agent> ;
+                       rdfs:comment "Lie une activité de fourniture de feedback à l'agent responsable de fournir le feedback."@fr ,
+                                    "Links a feedback provision activity to the agent responsible for providing the feedback."@en ,
+                                    "Links a feedback provision activity to the agent responsible for providing the feedback." .
+
+
+###  http://w3id.org/cylo/ont#hadCourseChapter
+:hadCourseChapter rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadMember> ;
+                  rdfs:domain :CourseContent ;
+                  rdfs:range :CourseChapter .
+
+
+###  http://w3id.org/cylo/ont#hadEvaluationQuestion
+:hadEvaluationQuestion rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadMember> ;
+                       rdfs:domain :EvaluationForm ;
+                       rdfs:range :EvaluationQuestion .
+
+
+###  http://w3id.org/cylo/ont#hadPedagogicalScenario
+:hadPedagogicalScenario rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadPlan> ;
+                        rdfs:domain :ParticipationInTeachingActivity ;
+                        rdfs:range :PedagogicalScenario .
+
+
+###  http://w3id.org/cylo/ont#hadPrerequisite
+:hadPrerequisite rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                 rdfs:domain :EducationalOfferings ;
+                 rdfs:range :EducationalOfferings ;
+                 rdfs:comment "Lie une entité, comme un cours ou un programme d’études, à une autre entité qui sert de prérequis. Cette relation indique que l'entité prérequise doit être complétée avant d’accéder à l'entité liée."@fr ,
+                              "Links an entity, such as a course or a program of study, to another entity that serves as its prerequisite. This relation indicates that the prerequisite entity must be completed before engaging with the linked entity."@en ,
+                              "Links an entity, such as a course or a program of study, to another entity that serves as its prerequisite. This relation indicates that the prerequisite entity must be completed before engaging with the linked entity." .
+
+
+###  http://w3id.org/cylo/ont#hasEducationalModality
+:hasEducationalModality rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                        rdfs:domain :PedagogicalScenario ;
+                        rdfs:range :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#hasParticipationSetting
+:hasParticipationSetting rdf:type owl:ObjectProperty ;
+                         rdfs:subPropertyOf :wasClassifiedAs ;
+                         rdfs:domain :PedagogicalScenario ;
+                         rdfs:range :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#hasPedagogicalScenario
+:hasPedagogicalScenario rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                        rdfs:domain :Course ;
+                        rdfs:range :PedagogicalScenario .
+
+
+###  http://w3id.org/cylo/ont#hasStep
+:hasStep rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+         rdfs:domain :PedagogicalScenario ;
+         rdfs:range :PedagogicalStep .
+
+
+###  http://w3id.org/cylo/ont#measuredLearningOutcome
+:measuredLearningOutcome rdf:type owl:ObjectProperty ;
+                         rdfs:subPropertyOf <http://www.w3.org/ns/prov#used> ;
+                         rdfs:domain :EvaluationActivity ;
+                         rdfs:range :LearningOutcome .
+
+
+###  http://w3id.org/cylo/ont#qualifiedDetermination
+:qualifiedDetermination rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#qualifiedInfluence> ;
+                        rdfs:domain <http://www.w3.org/ns/prov#Entity> ;
+                        rdfs:range :Determination ;
+                        rdfs:comment "If an entity prov:wasInfluencedBy an agent through a Determination, then the way in which the agent was designated can be qualified using qualifiedDetermination, linking the entity to a Determination instance that specifies details about the agent's role or other attributes related to their presence in the entity."@en ,
+                                     "Si une entité prov:wasInfluencedBy un agent via une détermination, alors la manière dont l’agent a été désigné peut être précisée à l’aide de qualifiedDetermination, qui relie l’entité à une instance de Determination spécifiant les détails sur le rôle de l’agent ou d'autres attributs liés à sa présence dans l’entité."@fr ,
+                                     "If an entity prov:wasInfluencedBy an agent through a Determination, then the way in which the agent was designated can be qualified using qualifiedDetermination, linking the entity to a Determination instance that specifies details about the agent's role or other attributes related to their presence in the entity." .
+
+
+###  http://w3id.org/cylo/ont#referedTo
+:referedTo rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+           rdfs:domain :Feedback ;
+           rdfs:range [ rdf:type owl:Class ;
+                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                      <http://www.w3.org/ns/prov#Entity>
+                                    )
+                      ] ;
+           rdfs:comment "Lie un feedback à une autre activité comme une activité d'apprentissage ou à une entité, comme une ressource, à laquelle il renvoie."@fr ,
+                        "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to."@en ,
+                        "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to." .
+
+
+###  http://w3id.org/cylo/ont#uses
+:uses rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+      rdfs:domain <http://www.w3.org/ns/prov#Plan> ;
+      rdfs:range <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#wasAfter
+:wasAfter rdf:type owl:ObjectProperty ;
+          owl:inverseOf :wasBefore ;
+          rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+          rdfs:range <http://www.w3.org/ns/prov#Activity> ;
+          rdfs:comment "Le sujet est une activité qui se produit après une autre activité. Si uneactivité A1 est après une autre activité A2, alors le début de A1 est après la fin de A2."@fr ,
+                       "The subject is an activity that occurs after another activity. If an activity A1 is after another activity A2, then the beginning of A1 is after the end of A2."@en ,
+                       "The subject is an activity that occurs after another activity. If an activity A1 is after another activity A2, then the beginning of A1 is after the end of A2." .
+
+
+###  http://w3id.org/cylo/ont#wasAlignedWith
+:wasAlignedWith rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInformedBy> ;
+                rdfs:domain :EvaluationActivity ;
+                rdfs:range :TeachingActivity .
+
+
+###  http://w3id.org/cylo/ont#wasAtteinedBy
+:wasAtteinedBy rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+               rdfs:domain :LearningOutcome ;
+               rdfs:range <http://www.w3.org/ns/prov#Person> .
+
+
+###  http://w3id.org/cylo/ont#wasBasedOn
+:wasBasedOn rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+            rdfs:domain :FeedbackProvision ;
+            rdfs:range [ rdf:type owl:Class ;
+                         owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                       <http://www.w3.org/ns/prov#Entity>
+                                     )
+                       ] ;
+            rdfs:comment "Lie une activité de fourniture de feedback à une autre activité comme une activité d'évaluation ou de production qui justifie le feedback."@fr ,
+                         "Links a feedback provision activity to another acitivty such as evaluation or production activity that justifies the feedback."@en ,
+                         "Links a feedback provision activity to another acitivty such as evaluation or production activity that justifies the feedback." .
+
+
+###  http://w3id.org/cylo/ont#wasBefore
+:wasBefore rdf:type owl:ObjectProperty ;
+           rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+           rdfs:range <http://www.w3.org/ns/prov#Activity> ;
+           rdfs:comment "Le sujet est une activité qui se produit avant une autre. Si une entité temporelle A1 est avant une autre activité A2, alors la fin de A1 est avant le début de A2. Ainsi, « avant » peut être considéré comme fondamental pour les instants et dérivé pour les intervalles."@fr ,
+                        "The subject is an activity that occurs before the object. If an activity A1 is before another activity A2, then the end of A1 is before the beginning of A2. Thus, before can be considered to be basic to instants and derived for intervals."@en ,
+                        "The subject is an activity that occurs before the object. If an activity A1 is before another activity A2, then the end of A1 is before the beginning of A2. Thus, before can be considered to be basic to instants and derived for intervals." .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAs
+:wasClassifiedAs rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                 rdfs:domain <http://www.w3.org/ns/prov#Entity> ;
+                 rdfs:range <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAsComplexityLevel
+:wasClassifiedAsComplexityLevel rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf :wasClassifiedAs ;
+                                rdfs:domain :LearningOutcome ;
+                                rdfs:range :ComplexityLevel .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAsEvaluationModality
+:wasClassifiedAsEvaluationModality rdf:type owl:ObjectProperty ;
+                                   rdfs:subPropertyOf :wasClassifiedAs ;
+                                   rdfs:domain :EvaluationQuestion ;
+                                   rdfs:range :EvaluationModality .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAsEvaluationType
+:wasClassifiedAsEvaluationType rdf:type owl:ObjectProperty ;
+                               rdfs:subPropertyOf :wasClassifiedAs ;
+                               rdfs:domain :EvaluationForm ;
+                               rdfs:range :EvaluationType .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAsFeedbackType
+:wasClassifiedAsFeedbackType rdf:type owl:ObjectProperty ;
+                             rdfs:subPropertyOf :wasClassifiedAs ;
+                             rdfs:domain :Feedback ;
+                             rdfs:range :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#wasClassifiedAsLearningEvent
+:wasClassifiedAsLearningEvent rdf:type owl:ObjectProperty ;
+                              rdfs:subPropertyOf :wasClassifiedAs ;
+                              rdfs:domain :PedagogicalScenario ;
+                              rdfs:range :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#wasEmployedBy
+:wasEmployedBy rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+               rdfs:domain <http://www.w3.org/ns/prov#Person> ;
+               rdfs:range <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#wasGeneratedByAssessmentActivity
+:wasGeneratedByAssessmentActivity rdf:type owl:ObjectProperty ;
+                                  rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasGeneratedBy> ;
+                                  rdfs:domain :Grade ;
+                                  rdfs:range :AssessmentActivity .
+
+
+###  http://w3id.org/cylo/ont#wasOfferedBy
+:wasOfferedBy rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAttributedTo> ;
+              rdfs:domain :EducationalOfferings ;
+              rdfs:range <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#wasValidatedBy
+:wasValidatedBy rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                rdfs:domain :EducationalOfferings ;
+                rdfs:range <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#wasValidatedByCourses
+:wasValidatedByCourses rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf :wasValidatedBy ;
+                       rdfs:domain :ProgramOfStudy ;
+                       rdfs:range :Course .
+
+
+###  http://w3id.org/cylo/ont#wasValidatedByGrade
+:wasValidatedByGrade rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf :wasValidatedBy ;
+                     rdfs:domain :Course ;
+                     rdfs:range :Grade .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://w3id.org/cylo/ont#academicYears
+:academicYears rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf :duration ;
+               rdfs:domain <http://www.w3.org/ns/prov#Entity> ;
+               rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#days
+:days rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf :duration ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                  <http://www.w3.org/ns/prov#Entity>
+                                )
+                  ] ;
+      rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#duration
+:duration rdf:type owl:DatatypeProperty ;
+          rdfs:domain [ rdf:type owl:Class ;
+                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                      <http://www.w3.org/ns/prov#Entity>
+                                    )
+                      ] ;
+          rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#enrollmentStatus
+:enrollmentStatus rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :Enrollment ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "enrollmentStatus est une propriété de type littéral qui spécifie l'état administratif d'une inscription au sein d'une entité institutionnelle ou éducative. Elle permet de suivre l'évolution du processus d'inscription, en indiquant si celle-ci est active, en attente, terminée, annulée ou dans tout autre état pertinent."@fr ,
+                               "enrollmentStatus is a datatype property that specifies the administrative state of an enrollment within an institutional or educational entity. It allows tracking the current status of an enrollment process, indicating whether it is active, pending, completed, canceled, or any other relevant state."@en ,
+                               "enrollmentStatus is a datatype property that specifies the administrative state of an enrollment within an institutional or educational entity. It allows tracking the current status of an enrollment process, indicating whether it is active, pending, completed, canceled, or any other relevant state." .
+
+
+###  http://w3id.org/cylo/ont#hours
+:hours rdf:type owl:DatatypeProperty ;
+       rdfs:subPropertyOf :duration ;
+       rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+       rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#isIntendedToBeMandatory
+:isIntendedToBeMandatory rdf:type owl:DatatypeProperty ;
+                         rdfs:domain <http://www.w3.org/ns/prov#Entity> ;
+                         rdfs:range xsd:boolean .
+
+
+###  http://w3id.org/cylo/ont#isMandatory
+:isMandatory rdf:type owl:DatatypeProperty ;
+             rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+             rdfs:range xsd:boolean .
+
+
+###  http://w3id.org/cylo/ont#minutes
+:minutes rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf :duration ;
+         rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+         rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#months
+:months rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf :duration ;
+        rdfs:domain [ rdf:type owl:Class ;
+                      owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                    <http://www.w3.org/ns/prov#Entity>
+                                  )
+                    ] ;
+        rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#nominalPosition
+:nominalPosition rdf:type owl:DatatypeProperty ;
+                 rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+                 rdfs:range xsd:string .
+
+
+###  http://w3id.org/cylo/ont#numericDuration
+:numericDuration rdf:type owl:DatatypeProperty ;
+                 rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+                 rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#numericPosition
+:numericPosition rdf:type owl:DatatypeProperty ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                             <http://www.w3.org/ns/prov#Entity>
+                                           )
+                             ] ;
+                 rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#quadrimesters
+:quadrimesters rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf :duration ;
+               rdfs:domain [ rdf:type owl:Class ;
+                             owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                           <http://www.w3.org/ns/prov#Entity>
+                                         )
+                           ] ;
+               rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#seconds
+:seconds rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf :duration ;
+         rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
+         rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#semesters
+:semesters rdf:type owl:DatatypeProperty ;
+           rdfs:subPropertyOf :duration ;
+           rdfs:domain [ rdf:type owl:Class ;
+                         owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                       <http://www.w3.org/ns/prov#Entity>
+                                     )
+                       ] ;
+           rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#weeks
+:weeks rdf:type owl:DatatypeProperty ;
+       rdfs:subPropertyOf :duration ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                   <http://www.w3.org/ns/prov#Entity>
+                                 )
+                   ] ;
+       rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#years
+:years rdf:type owl:DatatypeProperty ;
+       rdfs:subPropertyOf :duration ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                   <http://www.w3.org/ns/prov#Entity>
+                                 )
+                   ] ;
+       rdfs:range xsd:decimal .
 
 
 #################################################################
 #    Classes
 #################################################################
 
+###  http://w3id.org/cylo/ont#AcademicStaff
+:AcademicStaff rdf:type owl:Class ;
+               rdfs:subClassOf :Employee .
+
+
+###  http://w3id.org/cylo/ont#AcademicSupportStaff
+:AcademicSupportStaff rdf:type owl:Class ;
+                      rdfs:subClassOf :Employee .
+
+
+###  http://w3id.org/cylo/ont#AdministrativeStaff
+:AdministrativeStaff rdf:type owl:Class ;
+                     rdfs:subClassOf :Employee .
+
+
+###  http://w3id.org/cylo/ont#Affective
+:Affective rdf:type owl:Class ;
+           rdfs:subClassOf :ComplexityLevel .
+
+
+###  http://w3id.org/cylo/ont#Annotation
+:Annotation rdf:type owl:Class ;
+            rdfs:subClassOf :Production .
+
+
+###  http://w3id.org/cylo/ont#Answers
+:Answers rdf:type owl:Class ;
+         rdfs:subClassOf :Production .
+
+
+###  http://w3id.org/cylo/ont#Article
+:Article rdf:type owl:Class ;
+         rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#AssessmentActivity
+:AssessmentActivity rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+
+
+###  http://w3id.org/cylo/ont#Assignment
+:Assignment rdf:type owl:Class ;
+            rdfs:subClassOf :Production .
+
+
+###  http://w3id.org/cylo/ont#Attitude
+:Attitude rdf:type owl:Class ;
+          rdfs:subClassOf :LearningOutcome ;
+          rdfs:label "Savoir-Faire Comportementaux"@fr .
+
+
+###  http://w3id.org/cylo/ont#AudioRecording
+:AudioRecording rdf:type owl:Class ;
+                rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Bachelor
+:Bachelor rdf:type owl:Class ;
+          rdfs:subClassOf :ProgramOfStudy .
+
+
+###  http://w3id.org/cylo/ont#Book
+:Book rdf:type owl:Class ;
+      rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#CaseStudy
+:CaseStudy rdf:type owl:Class ;
+           rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Certificate
+:Certificate rdf:type owl:Class ;
+             rdfs:subClassOf :ProgramOfStudy .
+
+
+###  http://w3id.org/cylo/ont#Cognition
+:Cognition rdf:type owl:Class ;
+           rdfs:subClassOf :ComplexityLevel .
+
+
+###  http://w3id.org/cylo/ont#ComplexityLevel
+:ComplexityLevel rdf:type owl:Class ;
+                 rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#ConceptMap
+:ConceptMap rdf:type owl:Class ;
+            rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#CorrectionType
+:CorrectionType rdf:type owl:Class ;
+                rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#Corrective
+:Corrective rdf:type owl:Class ;
+            rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Course
+:Course rdf:type owl:Class ;
+        rdfs:subClassOf :EducationalOfferings .
+
+
+###  http://w3id.org/cylo/ont#CourseChapter
+:CourseChapter rdf:type owl:Class ;
+               rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#CourseContent
+:CourseContent rdf:type owl:Class ;
+               rdfs:subClassOf <http://www.w3.org/ns/prov#Collection> .
+
+
+###  http://w3id.org/cylo/ont#CourseEnrollment
+:CourseEnrollment rdf:type owl:Class ;
+                  rdfs:subClassOf :Enrollment .
+
+
+###  http://w3id.org/cylo/ont#CourseSummary
+:CourseSummary rdf:type owl:Class ;
+               rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Department
+:Department rdf:type owl:Class ;
+            rdfs:subClassOf <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#Determination
+:Determination rdf:type owl:Class ;
+               rdfs:subClassOf <http://www.w3.org/ns/prov#AgentInfluence> ;
+               rdfs:comment "A qualified relationship that represents a structured relationship between an agent and an entity. It is used to qualify the agent’s involvement in the entity without implying responsibility. This designation allows capturing metadata such as roles (prov:hadRole), conditions, or other attributes relevant to the agent’s presence in the entity."@en ,
+                            "Contrairement à prov:Attribution, qui associe une entité à un agent et implique généralement une paternité, une responsabilité ou une propriété, Determination n’implique pas que l’agent soit responsable de l’entité. Au lieu de cela, elle capture une relation neutre, où un agent est formellement reconnu au sein d’une entité, mais sans engagement quant à sa création, sa gestion ou ses résultats."@fr ,
+                            "Une relation qualifiée qui représente un lien structuré entre un agent et une entité. Elle est utilisée pour qualifier l'implication de l’agent dans l’entité sans impliquer de responsabilité. Cette désignation permet de capturer des métadonnées telles que les rôles (prov:hadRole), les conditions ou d’autres attributs pertinents liés à la présence de l’agent dans l’entité."@fr ,
+                            "Unlike prov:Attribution, which ascribes an entity to an agent and typically implies authorship, responsibility, or ownership, Determination does not imply that the agent is responsible for the entity. Instead, it captures a neutral relationship, where an agent is formally recognized within an entity, but without accountability for its creation, management, or output."@en ,
+                            "A qualified relationship that represents a structured relationship between an agent and an entity. It is used to qualify the agent’s involvement in the entity without implying responsibility. This designation allows capturing metadata such as roles (prov:hadRole), conditions, or other attributes relevant to the agent’s presence in the entity." ,
+                            "Unlike prov:Attribution, which ascribes an entity to an agent and typically implies authorship, responsibility, or ownership, Determination does not imply that the agent is responsible for the entity. Instead, it captures a neutral relationship, where an agent is formally recognized within an entity, but without accountability for its creation, management, or output." .
+
+
+###  http://w3id.org/cylo/ont#DigitalLearningEnvironment
+:DigitalLearningEnvironment rdf:type owl:Class ;
+                            rdfs:subClassOf <http://www.w3.org/ns/prov#SoftwareAgent> .
+
+
+###  http://w3id.org/cylo/ont#DigitalLearningTool
+:DigitalLearningTool rdf:type owl:Class ;
+                     rdfs:subClassOf <http://www.w3.org/ns/prov#SoftwareAgent> .
+
+
+###  http://w3id.org/cylo/ont#DiscussionForum
+:DiscussionForum rdf:type owl:Class ;
+                 rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Doctorate
+:Doctorate rdf:type owl:Class ;
+           rdfs:subClassOf :ProgramOfStudy .
+
+
+###  http://w3id.org/cylo/ont#Drawing
+:Drawing rdf:type owl:Class ;
+         rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#EducationalModality
+:EducationalModality rdf:type owl:Class ;
+                     rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#EducationalOfferings
+:EducationalOfferings rdf:type owl:Class ;
+                      rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#EducationalOrganization
+:EducationalOrganization rdf:type owl:Class ;
+                         rdfs:subClassOf <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#Employee
+:Employee rdf:type owl:Class ;
+          rdfs:subClassOf <http://www.w3.org/ns/prov#Role> .
+
+
+###  http://w3id.org/cylo/ont#Enrollment
+:Enrollment rdf:type owl:Class ;
+            rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> ;
+            rdfs:comment "Enrollment is an entity that documents the registration of an agent in an institutional or educational entity, such as a course or program. It represents a formal administrative record with a defined start and optional end date. Unlike an activity, Enrollment is not a process but a state that exists as long as the registration is valid. It can be influenced by an agent and referenced in provenance records to track participation in an academic or institutional structure."@en ,
+                         "L’Inscription est une entité qui documente l'enregistrement d'un agent dans une entité institutionnelle ou éducative, telle qu’un cours ou un programme. Elle représente une trace administrative formelle avec une date de début et éventuellement une date de fin. Contrairement à une activité, une inscription n'est pas un processus, mais un état qui existe tant que l'inscription est valide. Elle peut être influencée par un agent et référencée dans les traces de provenance pour suivre la participation à une structure académique ou institutionnelle."@fr ,
+                         "Enrollment is an entity that documents the registration of an agent in an institutional or educational entity, such as a course or program. It represents a formal administrative record with a defined start and optional end date. Unlike an activity, Enrollment is not a process but a state that exists as long as the registration is valid. It can be influenced by an agent and referenced in provenance records to track participation in an academic or institutional structure." .
+
+
+###  http://w3id.org/cylo/ont#EvaluationActivity
+:EvaluationActivity rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+
+
+###  http://w3id.org/cylo/ont#EvaluationForm
+:EvaluationForm rdf:type owl:Class ;
+                rdfs:subClassOf <http://www.w3.org/ns/prov#Collection> .
+
+
+###  http://w3id.org/cylo/ont#EvaluationModality
+:EvaluationModality rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#EvaluationQuestion
+:EvaluationQuestion rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#EvaluationType
+:EvaluationType rdf:type owl:Class ;
+                rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#Exercise
+:Exercise rdf:type owl:Class ;
+          rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Feedback
+:Feedback rdf:type owl:Class ;
+          rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#FeedbackAknowledgment
+:FeedbackAknowledgment rdf:type owl:Class ;
+                       rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> ;
+                       rdfs:comment "An activity in which an agent, for example a student, engages upon receiving and processing a feedback entity. The student aknowledges the feedback. This activity can involve reading, interpreting, or acting upon the feedback."@en ,
+                                    "Une activité dans laquelle un agent, par exemple un étudiant, s'engage lors de la réception et de l'analyse d'un feedback. Il en prend alors connaissance. Cette activité peut inclure la lecture, l'interprétation ou l'application du feedback."@fr ,
+                                    "An activity in which an agent, for example a student, engages upon receiving and processing a feedback entity. The student aknowledges the feedback. This activity can involve reading, interpreting, or acting upon the feedback." .
+
+
+###  http://w3id.org/cylo/ont#FeedbackProvision
+:FeedbackProvision rdf:type owl:Class ;
+                   rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> ;
+                   rdfs:comment "An activity in which an agent provides feedback to another agent , who becomes aware of it and process it through the cylo:FeedbackReception activity, based on an evaluation or production activity, possibly linking to a learning activity or resource."@en ,
+                                "Une activité dans laquelle un agent fournit un feedback à un autre agent qui en prend connaissance avec cylo:FeedbackReception sur la base d'une activité d'évaluation ou de production, pouvant renvoyer à une activité d'apprentissage ou une ressource."@fr ,
+                                "An activity in which an agent provides feedback to another agent , who becomes aware of it and process it through the cylo:FeedbackReception activity, based on an evaluation or production activity, possibly linking to a learning activity or resource." .
+
+
+###  http://w3id.org/cylo/ont#FeedbackType
+:FeedbackType rdf:type owl:Class ;
+              rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#Glossary
+:Glossary rdf:type owl:Class ;
+          rdfs:subClassOf :Resource .
+
+
 ###  http://w3id.org/cylo/ont#Grade
 :Grade rdf:type owl:Class ;
        rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
 
 
-###  http://w3id.org/cylo/ont#GradingActivity
-:GradingActivity rdf:type owl:Class ;
-                 rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+###  http://w3id.org/cylo/ont#HistologicalSlide
+:HistologicalSlide rdf:type owl:Class ;
+                   rdfs:subClassOf :Resource .
 
 
-###  http://w3id.org/cylo/ont#ParticipationInGradingActivity
-:ParticipationInGradingActivity rdf:type owl:Class ;
-                                rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
-                                rdfs:comment "A participation in grading activity is an association between a grading activity and the agents involved in said grading activity." .
+###  http://w3id.org/cylo/ont#Image
+:Image rdf:type owl:Class ;
+       rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Infographic
+:Infographic rdf:type owl:Class ;
+             rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#IntegrativeAssignment
+:IntegrativeAssignment rdf:type owl:Class ;
+                       rdfs:subClassOf :Assignment .
+
+
+###  http://w3id.org/cylo/ont#InteractiveQuiz
+:InteractiveQuiz rdf:type owl:Class ;
+                 rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Knowledge
+:Knowledge rdf:type owl:Class ;
+           rdfs:subClassOf :LearningOutcome ;
+           rdfs:label "Savoir"@fr .
+
+
+###  http://w3id.org/cylo/ont#LearningEvent
+:LearningEvent rdf:type owl:Class ;
+               rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#LearningOutcome
+:LearningOutcome rdf:type owl:Class ;
+                 rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#Lecturer
+:Lecturer rdf:type owl:Class ;
+          rdfs:subClassOf :AcademicStaff .
+
+
+###  http://w3id.org/cylo/ont#Master
+:Master rdf:type owl:Class ;
+        rdfs:subClassOf :ProgramOfStudy .
+
+
+###  http://w3id.org/cylo/ont#Movie
+:Movie rdf:type owl:Class ;
+       rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#OralModality
+:OralModality rdf:type owl:Class ;
+              rdfs:subClassOf :EvaluationModality .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInAssessmentActivity
+:ParticipationInAssessmentActivity rdf:type owl:Class ;
+                                   rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
+                                   rdfs:comment "A participation in grading activity is an association between a grading activity and the agents involved in said grading activity." .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInEvaluationActivity
+:ParticipationInEvaluationActivity rdf:type owl:Class ;
+                                   rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
+                                   rdfs:comment "A participation in evaluation activity is an association between an evaluation activity and the agents involved in said evaluation activity." .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInFeedbackAknowledgment
+:ParticipationInFeedbackAknowledgment rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
+                                      rdfs:comment "A participation in feedback reception is an association between a feedback aknowledgment activity and the agents involved in said activity."@en ,
+                                                   "Une participation à la réception de feedback est une association entre une activité de prise de connaissance de feedback et les agents impliqués dans ladite activité."@fr ,
+                                                   "A participation in feedback reception is an association between a feedback aknowledgment activity and the agents involved in said activity." .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInFeedbackProvision
+:ParticipationInFeedbackProvision rdf:type owl:Class ;
+                                  rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
+                                  rdfs:comment "A participation in feedback provision is an association between a feedback provision activity and the agents involved in said activity."@en ,
+                                               "Une participation à la fourniture de feedback est une association entre une activité de fourniture de feedback et les agents impliqués dans ladite activité."@fr ,
+                                               "A participation in feedback provision is an association between a feedback provision activity and the agents involved in said activity." .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInProductionActivity
+:ParticipationInProductionActivity rdf:type owl:Class ;
+                                   rdfs:subClassOf <http://www.w3.org/ns/prov#Association> .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInTakingExam
+:ParticipationInTakingExam rdf:type owl:Class ;
+                           rdfs:subClassOf <http://www.w3.org/ns/prov#Association> .
+
+
+###  http://w3id.org/cylo/ont#ParticipationInTeachingActivity
+:ParticipationInTeachingActivity rdf:type owl:Class ;
+                                 rdfs:subClassOf <http://www.w3.org/ns/prov#Association> ;
+                                 rdfs:comment "A participation in teaching activity is an association between a teaching activity and the agents involved in said teaching activity." .
+
+
+###  http://w3id.org/cylo/ont#ParticipationSetting
+:ParticipationSetting rdf:type owl:Class ;
+                      rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#PedagogicalScenario
+:PedagogicalScenario rdf:type owl:Class ;
+                     rdfs:subClassOf <http://www.w3.org/ns/prov#Plan> .
+
+
+###  http://w3id.org/cylo/ont#PedagogicalStep
+:PedagogicalStep rdf:type owl:Class ;
+                 rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#PeerTutor
+:PeerTutor rdf:type owl:Class ;
+           rdfs:subClassOf :AcademicSupportStaff .
+
+
+###  http://w3id.org/cylo/ont#Picture
+:Picture rdf:type owl:Class ;
+         rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Podcast
+:Podcast rdf:type owl:Class ;
+         rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#PracticalAssignment
+:PracticalAssignment rdf:type owl:Class ;
+                     rdfs:subClassOf :Assignment .
+
+
+###  http://w3id.org/cylo/ont#PracticalModality
+:PracticalModality rdf:type owl:Class ;
+                   rdfs:subClassOf :EvaluationModality .
+
+
+###  http://w3id.org/cylo/ont#PracticeExam
+:PracticeExam rdf:type owl:Class ;
+              rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Production
+:Production rdf:type owl:Class ;
+            rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#ProductionActivity
+:ProductionActivity rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+
+
+###  http://w3id.org/cylo/ont#Professor
+:Professor rdf:type owl:Class ;
+           rdfs:subClassOf :AcademicStaff .
+
+
+###  http://w3id.org/cylo/ont#ProgramOfStudy
+:ProgramOfStudy rdf:type owl:Class ;
+                rdfs:subClassOf :EducationalOfferings .
+
+
+###  http://w3id.org/cylo/ont#ProgramOfStudyEnrollment
+:ProgramOfStudyEnrollment rdf:type owl:Class ;
+                          rdfs:subClassOf :Enrollment .
+
+
+###  http://w3id.org/cylo/ont#Psychomotor
+:Psychomotor rdf:type owl:Class ;
+             rdfs:subClassOf :ComplexityLevel .
+
+
+###  http://w3id.org/cylo/ont#ReadingSummary
+:ReadingSummary rdf:type owl:Class ;
+                rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Researcher
+:Researcher rdf:type owl:Class ;
+            rdfs:subClassOf :Employee .
+
+
+###  http://w3id.org/cylo/ont#Resource
+:Resource rdf:type owl:Class ;
+          rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
+###  http://w3id.org/cylo/ont#Schema
+:Schema rdf:type owl:Class ;
+        rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#School
+:School rdf:type owl:Class ;
+        rdfs:subClassOf <http://www.w3.org/ns/prov#Organization> .
+
+
+###  http://w3id.org/cylo/ont#SchoolDiploma
+:SchoolDiploma rdf:type owl:Class ;
+               rdfs:subClassOf :ProgramOfStudy .
+
+
+###  http://w3id.org/cylo/ont#Skills
+:Skills rdf:type owl:Class ;
+        rdfs:subClassOf :LearningOutcome ;
+        rdfs:label "Savoir-Faire"@fr .
+
+
+###  http://w3id.org/cylo/ont#Slideshow
+:Slideshow rdf:type owl:Class ;
+           rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Student
+:Student rdf:type owl:Class ;
+         rdfs:subClassOf <http://www.w3.org/ns/prov#Role> .
+
+
+###  http://w3id.org/cylo/ont#SummaryTable
+:SummaryTable rdf:type owl:Class ;
+              rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Syllabus
+:Syllabus rdf:type owl:Class ;
+          rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#TakingExamActivity
+:TakingExamActivity rdf:type owl:Class ;
+                    rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+
+
+###  http://w3id.org/cylo/ont#TeachingActivity
+:TeachingActivity rdf:type owl:Class ;
+                  rdfs:subClassOf <http://www.w3.org/ns/prov#Activity> .
+
+
+###  http://w3id.org/cylo/ont#TeachingAssistant
+:TeachingAssistant rdf:type owl:Class ;
+                   rdfs:subClassOf :AcademicSupportStaff .
+
+
+###  http://w3id.org/cylo/ont#TechnicalStaff
+:TechnicalStaff rdf:type owl:Class ;
+                rdfs:subClassOf :Employee .
+
+
+###  http://w3id.org/cylo/ont#TextDocument
+:TextDocument rdf:type owl:Class ;
+              rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#University
+:University rdf:type owl:Class ;
+            rdfs:subClassOf :EducationalOrganization .
+
+
+###  http://w3id.org/cylo/ont#Video
+:Video rdf:type owl:Class ;
+       rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#Webinar
+:Webinar rdf:type owl:Class ;
+         rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#WrittenAssignment
+:WrittenAssignment rdf:type owl:Class ;
+                   rdfs:subClassOf :Assignment .
+
+
+###  http://w3id.org/cylo/ont#WrittenModality
+:WrittenModality rdf:type owl:Class ;
+                 rdfs:subClassOf :EvaluationModality .
 
 
 #################################################################
 #    Individuals
 #################################################################
 
-###  http://w3id.org/cylo/ont#employee
-:employee rdf:type owl:NamedIndividual ,
-                   <http://www.w3.org/ns/prov#Role> .
+###  http://w3id.org/cylo/ont#adaptation
+:adaptation rdf:type owl:NamedIndividual ,
+                     :Psychomotor .
 
 
-###  http://w3id.org/cylo/ont#student
-:student rdf:type owl:NamedIndividual ,
-                  <http://www.w3.org/ns/prov#Role> .
+###  http://w3id.org/cylo/ont#analyzing
+:analyzing rdf:type owl:NamedIndividual ,
+                    :Cognition .
 
 
-###  Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
+###  http://w3id.org/cylo/ont#anatomicalDissection
+:anatomicalDissection rdf:type owl:NamedIndividual ,
+                               :PracticalAssignment ,
+                               :PracticalModality .
+
+
+###  http://w3id.org/cylo/ont#applying
+:applying rdf:type owl:NamedIndividual ,
+                   :Cognition .
+
+
+###  http://w3id.org/cylo/ont#automatedFeedback
+:automatedFeedback rdf:type owl:NamedIndividual ,
+                            :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#autonomous
+:autonomous rdf:type owl:NamedIndividual ,
+                     :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#capstone
+:capstone rdf:type owl:NamedIndividual ,
+                   :IntegrativeAssignment .
+
+
+###  http://w3id.org/cylo/ont#caseStudy
+:caseStudy rdf:type owl:NamedIndividual ,
+                    :WrittenAssignment .
+
+
+###  http://w3id.org/cylo/ont#characterizing
+:characterizing rdf:type owl:NamedIndividual ,
+                         :Affective .
+
+
+###  http://w3id.org/cylo/ont#complexOvertResponse
+:complexOvertResponse rdf:type owl:NamedIndividual ,
+                               :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#correctiveFeedback
+:correctiveFeedback rdf:type owl:NamedIndividual ,
+                             :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#creating
+:creating rdf:type owl:NamedIndividual ,
+                   :Cognition .
+
+
+###  http://w3id.org/cylo/ont#creation
+:creation rdf:type owl:NamedIndividual ,
+                   :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#debate
+:debate rdf:type owl:NamedIndividual ,
+                 :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#delayedFeedback
+:delayedFeedback rdf:type owl:NamedIndividual ,
+                          :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#distance
+:distance rdf:type owl:NamedIndividual ,
+                   :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#essay
+:essay rdf:type owl:NamedIndividual ,
+                :WrittenAssignment .
+
+
+###  http://w3id.org/cylo/ont#evaluating
+:evaluating rdf:type owl:NamedIndividual ,
+                     :Cognition .
+
+
+###  http://w3id.org/cylo/ont#exercise
+:exercise rdf:type owl:NamedIndividual ,
+                   :PracticalAssignment .
+
+
+###  http://w3id.org/cylo/ont#experimentation
+:experimentation rdf:type owl:NamedIndividual ,
+                          :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#exploration
+:exploration rdf:type owl:NamedIndividual ,
+                      :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#faceToFace
+:faceToFace rdf:type owl:NamedIndividual ,
+                     :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#formative
+:formative rdf:type owl:NamedIndividual ,
+                    :EvaluationType .
+
+
+###  http://w3id.org/cylo/ont#formativeFeedback
+:formativeFeedback rdf:type owl:NamedIndividual ,
+                            :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#generalFeedback
+:generalFeedback rdf:type owl:NamedIndividual ,
+                          :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#guidedResponse
+:guidedResponse rdf:type owl:NamedIndividual ,
+                         :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#hybrid
+:hybrid rdf:type owl:NamedIndividual ,
+                 :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#hyflex
+:hyflex rdf:type owl:NamedIndividual ,
+                 :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#imitation
+:imitation rdf:type owl:NamedIndividual ,
+                    :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#immediateFeedback
+:immediateFeedback rdf:type owl:NamedIndividual ,
+                            :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#ipsative
+:ipsative rdf:type owl:NamedIndividual ,
+                   :EvaluationType .
+
+
+###  http://w3id.org/cylo/ont#labWork
+:labWork rdf:type owl:NamedIndividual ,
+                  :PracticalAssignment .
+
+
+###  http://w3id.org/cylo/ont#longEssayQuestion
+:longEssayQuestion rdf:type owl:NamedIndividual ,
+                            :WrittenModality .
+
+
+###  http://w3id.org/cylo/ont#mCQ
+:mCQ rdf:type owl:NamedIndividual ,
+              :WrittenModality .
+
+
+###  http://w3id.org/cylo/ont#matchingQuestion
+:matchingQuestion rdf:type owl:NamedIndividual ,
+                           :WrittenModality .
+
+
+###  http://w3id.org/cylo/ont#mechanism
+:mechanism rdf:type owl:NamedIndividual ,
+                    :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#metacognition
+:metacognition rdf:type owl:NamedIndividual ,
+                        :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#metacognitiveFeedback
+:metacognitiveFeedback rdf:type owl:NamedIndividual ,
+                                :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#motivationalFeedback
+:motivationalFeedback rdf:type owl:NamedIndividual ,
+                               :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#nonStandardized
+:nonStandardized rdf:type owl:NamedIndividual ,
+                          :CorrectionType .
+
+
+###  http://w3id.org/cylo/ont#onlineAsynchronous
+:onlineAsynchronous rdf:type owl:NamedIndividual ,
+                             :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#onlineSynchronous
+:onlineSynchronous rdf:type owl:NamedIndividual ,
+                            :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#oralFeedback
+:oralFeedback rdf:type owl:NamedIndividual ,
+                       :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#organizing
+:organizing rdf:type owl:NamedIndividual ,
+                     :Affective .
+
+
+###  http://w3id.org/cylo/ont#origination
+:origination rdf:type owl:NamedIndividual ,
+                      :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#paper
+:paper rdf:type owl:NamedIndividual ,
+                :WrittenAssignment .
+
+
+###  http://w3id.org/cylo/ont#peerFeedback
+:peerFeedback rdf:type owl:NamedIndividual ,
+                       :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#perception
+:perception rdf:type owl:NamedIndividual ,
+                     :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#portfolio
+:portfolio rdf:type owl:NamedIndividual ,
+                    :IntegrativeAssignment .
+
+
+###  http://w3id.org/cylo/ont#practicals
+:practicals rdf:type owl:NamedIndividual ,
+                     :PracticalModality .
+
+
+###  http://w3id.org/cylo/ont#practice
+:practice rdf:type owl:NamedIndividual ,
+                   :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#problemSet
+:problemSet rdf:type owl:NamedIndividual ,
+                     :PracticalAssignment .
+
+
+###  http://w3id.org/cylo/ont#project
+:project rdf:type owl:NamedIndividual ,
+                  :IntegrativeAssignment ,
+                  :PracticalModality .
+
+
+###  http://w3id.org/cylo/ont#receiving
+:receiving rdf:type owl:NamedIndividual ,
+                    :Affective .
+
+
+###  http://w3id.org/cylo/ont#remembering
+:remembering rdf:type owl:NamedIndividual ,
+                      :Cognition .
+
+
+###  http://w3id.org/cylo/ont#report
+:report rdf:type owl:NamedIndividual ,
+                 :WrittenAssignment .
+
+
+###  http://w3id.org/cylo/ont#responding
+:responding rdf:type owl:NamedIndividual ,
+                     :Affective .
+
+
+###  http://w3id.org/cylo/ont#selfFeedback
+:selfFeedback rdf:type owl:NamedIndividual ,
+                       :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#set
+:set rdf:type owl:NamedIndividual ,
+              :Psychomotor .
+
+
+###  http://w3id.org/cylo/ont#shortEssayQuestion
+:shortEssayQuestion rdf:type owl:NamedIndividual ,
+                             :WrittenModality .
+
+
+###  http://w3id.org/cylo/ont#specificFeedback
+:specificFeedback rdf:type owl:NamedIndividual ,
+                           :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#standardized
+:standardized rdf:type owl:NamedIndividual ,
+                       :CorrectionType .
+
+
+###  http://w3id.org/cylo/ont#suggestiveFeedback
+:suggestiveFeedback rdf:type owl:NamedIndividual ,
+                             :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#summative
+:summative rdf:type owl:NamedIndividual ,
+                    :EvaluationType .
+
+
+###  http://w3id.org/cylo/ont#summativeFeedback
+:summativeFeedback rdf:type owl:NamedIndividual ,
+                            :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#teacherFeedback
+:teacherFeedback rdf:type owl:NamedIndividual ,
+                          :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#transmissionAndReception
+:transmissionAndReception rdf:type owl:NamedIndividual ,
+                                   :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#understanding
+:understanding rdf:type owl:NamedIndividual ,
+                        :Cognition .
+
+
+###  http://w3id.org/cylo/ont#valuing
+:valuing rdf:type owl:NamedIndividual ,
+                  :Affective .
+
+
+###  http://w3id.org/cylo/ont#withPeers
+:withPeers rdf:type owl:NamedIndividual ,
+                    :EducationalModality .
+
+
+###  http://w3id.org/cylo/ont#writtenFeedback
+:writtenFeedback rdf:type owl:NamedIndividual ,
+                          :FeedbackType .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
