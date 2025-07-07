@@ -70,7 +70,7 @@ xsd:duration rdf:type rdfs:Datatype .
 :feedbackWasAknowledgedBy rdf:type owl:ObjectProperty ;
                           rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAssociatedWith> ;
                           rdfs:domain :FeedbackAknowledgment ;
-                          rdfs:range <http://www.w3.org/ns/prov#Agent> ;
+                          rdfs:range <http://www.w3.org/ns/prov#Person> ;
                           rdfs:comment "Lie une activité de réception de feedback à l'agent recevant le feedback."@fr ,
                                        "Links a feedback reception activity to the agent receiving the feedback."@en ,
                                        "Links a feedback reception activity to the agent receiving the feedback." .
@@ -80,7 +80,7 @@ xsd:duration rdf:type rdfs:Datatype .
 :feedbackWasProvidedBy rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAssociatedWith> ;
                        rdfs:domain :FeedbackProvision ;
-                       rdfs:range <http://www.w3.org/ns/prov#Agent> ;
+                       rdfs:range <http://www.w3.org/ns/prov#Person> ;
                        rdfs:comment "Lie une activité de fourniture de feedback à l'agent responsable de fournir le feedback."@fr ,
                                     "Links a feedback provision activity to the agent responsible for providing the feedback."@en ,
                                     "Links a feedback provision activity to the agent responsible for providing the feedback." .
@@ -268,7 +268,7 @@ xsd:duration rdf:type rdfs:Datatype .
 ###  http://w3id.org/cylo/ont#wasClassifiedAsLearningEvent
 :wasClassifiedAsLearningEvent rdf:type owl:ObjectProperty ;
                               rdfs:subPropertyOf :wasClassifiedAs ;
-                              rdfs:domain :PedagogicalScenario ;
+                              rdfs:domain :PedagogicalStep ;
                               rdfs:range :LearningEvent .
 
 
@@ -323,6 +323,11 @@ xsd:duration rdf:type rdfs:Datatype .
                rdfs:subPropertyOf :duration ;
                rdfs:domain <http://www.w3.org/ns/prov#Entity> ;
                rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#courseCode
+:courseCode rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Course .
 
 
 ###  http://w3id.org/cylo/ont#days
@@ -880,6 +885,11 @@ xsd:duration rdf:type rdfs:Datatype .
               rdfs:subClassOf :Resource .
 
 
+###  http://w3id.org/cylo/ont#Presentation
+:Presentation rdf:type owl:Class ;
+              rdfs:subClassOf :Assignment .
+
+
 ###  http://w3id.org/cylo/ont#Production
 :Production rdf:type owl:Class ;
             rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
@@ -1174,6 +1184,11 @@ xsd:duration rdf:type rdfs:Datatype .
 ###  http://w3id.org/cylo/ont#ipsative
 :ipsative rdf:type owl:NamedIndividual ,
                    :EvaluationType .
+
+
+###  http://w3id.org/cylo/ont#lab
+:lab rdf:type owl:NamedIndividual ,
+              :PracticalModality .
 
 
 ###  http://w3id.org/cylo/ont#labWork
