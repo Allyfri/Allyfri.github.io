@@ -293,6 +293,12 @@ xsd:duration rdf:type rdfs:Datatype .
               rdfs:range <http://www.w3.org/ns/prov#Organization> .
 
 
+###  http://w3id.org/cylo/ont#wasPresent
+:wasPresent rdf:type owl:ObjectProperty ;
+            rdfs:domain :ParticipationInEvaluationActivity ;
+            rdfs:range :Presence .
+
+
 ###  http://w3id.org/cylo/ont#wasValidatedBy
 :wasValidatedBy rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
@@ -327,7 +333,8 @@ xsd:duration rdf:type rdfs:Datatype .
 
 ###  http://w3id.org/cylo/ont#courseCode
 :courseCode rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Course .
+            rdfs:domain :Course ;
+            rdfs:range xsd:string .
 
 
 ###  http://w3id.org/cylo/ont#days
@@ -448,6 +455,12 @@ xsd:duration rdf:type rdfs:Datatype .
            rdfs:range xsd:decimal .
 
 
+###  http://w3id.org/cylo/ont#studentID
+:studentID rdf:type owl:DatatypeProperty ;
+           rdfs:domain <http://www.w3.org/ns/prov#Person> ;
+           rdfs:range xsd:string .
+
+
 ###  http://w3id.org/cylo/ont#weeks
 :weeks rdf:type owl:DatatypeProperty ;
        rdfs:subPropertyOf :duration ;
@@ -468,6 +481,24 @@ xsd:duration rdf:type rdfs:Datatype .
                                  )
                    ] ;
        rdfs:range xsd:decimal .
+
+
+###  http://xmlns.com/foaf/0.1/firstName
+foaf:firstName rdf:type owl:DatatypeProperty ;
+               rdfs:domain <http://www.w3.org/ns/prov#Person> ;
+               rdfs:range rdfs:Literal .
+
+
+###  http://xmlns.com/foaf/0.1/lastName
+foaf:lastName rdf:type owl:DatatypeProperty ;
+              rdfs:domain <http://www.w3.org/ns/prov#Person> ;
+              rdfs:range rdfs:Literal .
+
+
+###  http://xmlns.com/foaf/0.1/name
+foaf:name rdf:type owl:DatatypeProperty ;
+          rdfs:domain owl:Thing ;
+          rdfs:range rdfs:Literal .
 
 
 #################################################################
@@ -885,6 +916,11 @@ xsd:duration rdf:type rdfs:Datatype .
               rdfs:subClassOf :Resource .
 
 
+###  http://w3id.org/cylo/ont#Presence
+:Presence rdf:type owl:Class ;
+          rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> .
+
+
 ###  http://w3id.org/cylo/ont#Presentation
 :Presentation rdf:type owl:Class ;
               rdfs:subClassOf :Assignment .
@@ -1030,6 +1066,11 @@ xsd:duration rdf:type rdfs:Datatype .
 #    Individuals
 #################################################################
 
+###  http://w3id.org/cylo/ont#absent
+:absent rdf:type owl:NamedIndividual ,
+                 :Presence .
+
+
 ###  http://w3id.org/cylo/ont#adaptation
 :adaptation rdf:type owl:NamedIndividual ,
                      :Psychomotor .
@@ -1121,6 +1162,11 @@ xsd:duration rdf:type rdfs:Datatype .
                      :Cognition .
 
 
+###  http://w3id.org/cylo/ont#excused
+:excused rdf:type owl:NamedIndividual ,
+                  :Presence .
+
+
 ###  http://w3id.org/cylo/ont#exercise
 :exercise rdf:type owl:NamedIndividual ,
                    :PracticalAssignment .
@@ -1196,6 +1242,20 @@ xsd:duration rdf:type rdfs:Datatype .
                   :PracticalAssignment .
 
 
+###  http://w3id.org/cylo/ont#lessThan10
+:lessThan10 rdf:type owl:NamedIndividual ,
+                     :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#lessThan100
+:lessThan100 rdf:type owl:NamedIndividual ,
+                      :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#lessthan50
+:lessthan50 rdf:type owl:NamedIndividual .
+
+
 ###  http://w3id.org/cylo/ont#longEssayQuestion
 :longEssayQuestion rdf:type owl:NamedIndividual ,
                             :WrittenModality .
@@ -1224,6 +1284,11 @@ xsd:duration rdf:type rdfs:Datatype .
 ###  http://w3id.org/cylo/ont#metacognitiveFeedback
 :metacognitiveFeedback rdf:type owl:NamedIndividual ,
                                 :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#moreThan100
+:moreThan100 rdf:type owl:NamedIndividual ,
+                      :ParticipationSetting .
 
 
 ###  http://w3id.org/cylo/ont#motivationalFeedback
@@ -1289,6 +1354,11 @@ xsd:duration rdf:type rdfs:Datatype .
 ###  http://w3id.org/cylo/ont#practice
 :practice rdf:type owl:NamedIndividual ,
                    :LearningEvent .
+
+
+###  http://w3id.org/cylo/ont#present
+:present rdf:type owl:NamedIndividual ,
+                  :Presence .
 
 
 ###  http://w3id.org/cylo/ont#problemSet
@@ -1390,6 +1460,35 @@ xsd:duration rdf:type rdfs:Datatype .
 ###  http://w3id.org/cylo/ont#writtenFeedback
 :writtenFeedback rdf:type owl:NamedIndividual ,
                           :FeedbackType .
+
+
+###  http://w3id.org/cylo/ont#1
+<http://w3id.org/cylo/ont#1> rdf:type owl:NamedIndividual ,
+                                      :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#2
+<http://w3id.org/cylo/ont#2> rdf:type owl:NamedIndividual ,
+                                      :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#3
+<http://w3id.org/cylo/ont#3> rdf:type owl:NamedIndividual ,
+                                      :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#4
+<http://w3id.org/cylo/ont#4> rdf:type owl:NamedIndividual ,
+                                      :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#5
+<http://w3id.org/cylo/ont#5> rdf:type owl:NamedIndividual ,
+                                      :ParticipationSetting .
+
+
+###  http://xmlns.com/foaf/0.1/1
+<http://xmlns.com/foaf/0.1/1> rdf:type owl:NamedIndividual .
 
 
 ###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
