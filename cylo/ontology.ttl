@@ -52,6 +52,14 @@ xsd:duration rdf:type rdfs:Datatype .
                         rdfs:range :LearningOutcome .
 
 
+###  http://w3id.org/cylo/ont#employed
+:employed rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+          rdfs:domain :PedagogicalStep ,
+                      <http://www.w3.org/ns/prov#Plan> ;
+          rdfs:range <http://www.w3.org/ns/prov#Entity> .
+
+
 ###  http://w3id.org/cylo/ont#enrollmentConcerned
 :enrollmentConcerned rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
@@ -93,6 +101,13 @@ xsd:duration rdf:type rdfs:Datatype .
                   rdfs:range :CourseChapter .
 
 
+###  http://w3id.org/cylo/ont#hadEducationalModality
+:hadEducationalModality rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                        rdfs:domain :PedagogicalScenario ;
+                        rdfs:range :EducationalModality .
+
+
 ###  http://w3id.org/cylo/ont#hadEvaluationQuestion
 :hadEvaluationQuestion rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadMember> ;
@@ -102,8 +117,10 @@ xsd:duration rdf:type rdfs:Datatype .
 
 ###  http://w3id.org/cylo/ont#hadPedagogicalScenario
 :hadPedagogicalScenario rdf:type owl:ObjectProperty ;
-                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadPlan> ;
-                        rdfs:domain :ParticipationInTeachingActivity ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadPlan> ,
+                                           <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                        rdfs:domain :Course ,
+                                    :ParticipationInTeachingActivity ;
                         rdfs:range :PedagogicalScenario .
 
 
@@ -117,11 +134,11 @@ xsd:duration rdf:type rdfs:Datatype .
                               "Links an entity, such as a course or a program of study, to another entity that serves as its prerequisite. This relation indicates that the prerequisite entity must be completed before engaging with the linked entity." .
 
 
-###  http://w3id.org/cylo/ont#hasEducationalModality
-:hasEducationalModality rdf:type owl:ObjectProperty ;
-                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
-                        rdfs:domain :PedagogicalScenario ;
-                        rdfs:range :EducationalModality .
+###  http://w3id.org/cylo/ont#hadStep
+:hadStep rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+         rdfs:domain :PedagogicalScenario ;
+         rdfs:range :PedagogicalStep .
 
 
 ###  http://w3id.org/cylo/ont#hasParticipationSetting
@@ -129,20 +146,6 @@ xsd:duration rdf:type rdfs:Datatype .
                          rdfs:subPropertyOf :wasClassifiedAs ;
                          rdfs:domain :PedagogicalScenario ;
                          rdfs:range :ParticipationSetting .
-
-
-###  http://w3id.org/cylo/ont#hasPedagogicalScenario
-:hasPedagogicalScenario rdf:type owl:ObjectProperty ;
-                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
-                        rdfs:domain :Course ;
-                        rdfs:range :PedagogicalScenario .
-
-
-###  http://w3id.org/cylo/ont#hasStep
-:hasStep rdf:type owl:ObjectProperty ;
-         rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
-         rdfs:domain :PedagogicalScenario ;
-         rdfs:range :PedagogicalStep .
 
 
 ###  http://w3id.org/cylo/ont#measuredLearningOutcome
@@ -174,13 +177,6 @@ xsd:duration rdf:type rdfs:Datatype .
            rdfs:comment "Lie un feedback à une autre activité comme une activité d'apprentissage ou à une entité, comme une ressource, à laquelle il renvoie."@fr ,
                         "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to."@en ,
                         "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to." .
-
-
-###  http://w3id.org/cylo/ont#uses
-:uses rdf:type owl:ObjectProperty ;
-      rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
-      rdfs:domain <http://www.w3.org/ns/prov#Plan> ;
-      rdfs:range <http://www.w3.org/ns/prov#Entity> .
 
 
 ###  http://w3id.org/cylo/ont#wasAfter
@@ -435,6 +431,16 @@ xsd:duration rdf:type rdfs:Datatype .
                                          )
                            ] ;
                rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#scheduledFor
+:scheduledFor rdf:type owl:DatatypeProperty ;
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( :PedagogicalStep
+                                          <http://www.w3.org/ns/prov#Plan>
+                                        )
+                          ] ;
+              rdfs:range xsd:dateTime .
 
 
 ###  http://w3id.org/cylo/ont#seconds
