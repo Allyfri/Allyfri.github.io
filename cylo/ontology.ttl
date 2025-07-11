@@ -884,7 +884,9 @@ foaf:name rdf:type owl:DatatypeProperty ;
 
 ###  http://w3id.org/cylo/ont#PedagogicalScenario
 :PedagogicalScenario rdf:type owl:Class ;
-                     rdfs:subClassOf <http://www.w3.org/ns/prov#Plan> .
+                     rdfs:subClassOf <http://www.w3.org/ns/prov#Plan> ;
+                     rdfs:comment """A PedagogicalScenario represents an intended sequence or structure of learning activities and pedagogical steps designed to achieve specific learning outcomes. It serves as a plan or blueprint for instruction, specifying what should happen, in what order, and under which conditions.
+While it may include scheduled dates (:scheduledFor) indicating when the plan is intended to take place, a PedagogicalScenario does not represent the actual enactment or occurrence of the learning activities themselves (see :TeachingActivity). Instead, it remains a prescriptive model distinct from the real-time implementation or learner engagement.""" .
 
 
 ###  http://w3id.org/cylo/ont#PedagogicalStep
