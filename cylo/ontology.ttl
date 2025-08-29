@@ -115,6 +115,17 @@ xsd:duration rdf:type rdfs:Datatype .
                        rdfs:range :EvaluationQuestion .
 
 
+###  http://w3id.org/cylo/ont#hadLearningOutcome
+:hadLearningOutcome rdf:type owl:ObjectProperty ;
+                    rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                    rdfs:domain [ rdf:type owl:Class ;
+                                  owl:unionOf ( :PedagogicalScenario
+                                                :PedagogicalStep
+                                              )
+                                ] ;
+                    rdfs:range :LearningOutcome .
+
+
 ###  http://w3id.org/cylo/ont#hadPedagogicalScenario
 :hadPedagogicalScenario rdf:type owl:ObjectProperty ;
                         rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadPlan> ,
