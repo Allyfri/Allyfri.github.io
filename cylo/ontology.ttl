@@ -190,6 +190,13 @@ xsd:duration rdf:type rdfs:Datatype .
                         "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to." .
 
 
+###  http://w3id.org/cylo/ont#wasAbout
+:wasAbout rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+          rdfs:domain :EvaluationQuestion ;
+          rdfs:range :Resource .
+
+
 ###  http://w3id.org/cylo/ont#wasAfter
 :wasAfter rdf:type owl:ObjectProperty ;
           owl:inverseOf :wasBefore ;
@@ -433,6 +440,21 @@ xsd:duration rdf:type rdfs:Datatype .
                  rdfs:range xsd:decimal .
 
 
+###  http://w3id.org/cylo/ont#pseudonymizedID
+:pseudonymizedID rdf:type owl:DatatypeProperty ;
+                 rdfs:domain <http://www.w3.org/ns/prov#Person> ;
+                 rdfs:range xsd:string ;
+                 rdfs:comment """ID pseudonymisé est une propriété de type données qui associe une prov:Person à une chaîne de pseudonymisation utilisée pour le traitement et l’analyse des données.
+La valeur ne doit pas contenir d’information directement identifiante (par exemple nom, numéro de matricule, adresse e-mail) et vise à préserver l’anonymat de la personne conformément aux exigences du RGPD, tout en permettant de relier entre elles les traces ou enregistrements appartenant à une même personne au sein du jeu de données."""@fr ,
+                              """pseudonymizedID is a datatype property that associates a prov:Person with a pseudonymized string used for data processing and analysis.
+The value must not contain directly identifying information (such as name, student number, or email address) and is intended to preserve the person’s anonymity in accordance with data protection regulations (e.g., GDPR), while still allowing records that belong to the same individual to be linked within the dataset.”"""@en ,
+                              """pseudonymizedID is a datatype property that associates a prov:Person with a pseudonymized string used for data processing and analysis.
+The value must not contain directly identifying information (such as name, student number, or email address) and is intended to preserve the person’s anonymity in accordance with data protection regulations (e.g., GDPR), while still allowing records that belong to the same individual to be linked within the dataset.”""" ;
+                 rdfs:label "ID Pseudonymisé"@fr ,
+                            "Pseudonymized ID"@en ,
+                            "Pseudonymized ID" .
+
+
 ###  http://w3id.org/cylo/ont#quadrimesters
 :quadrimesters rdf:type owl:DatatypeProperty ;
                rdfs:subPropertyOf :duration ;
@@ -600,7 +622,19 @@ foaf:name rdf:type owl:DatatypeProperty ;
 
 ###  http://w3id.org/cylo/ont#Cognition
 :Cognition rdf:type owl:Class ;
-           rdfs:subClassOf :ComplexityLevel .
+           rdfs:subClassOf :ComplexityLevel ;
+           rdfs:comment """A hierarchical classification of cognitive processes involved in learning, describing the progression of mental abilities from remembering to creating. This taxonomy is based on the revised version of Bloom’s taxonomy by Anderson and Krathwohl (2001), which identifies six levels: remember, understand, apply, analyze, evaluate, and create.
+
+Reference:
+Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing: A Revision of Bloom’s Taxonomy of Educational Objectives. New York: Longman."""@en ,
+                        """Une classification hiérarchique des processus cognitifs impliqués dans l’apprentissage, décrivant la progression des capacités mentales de la mémorisation à la création. Cette taxonomie repose sur la révision de la taxonomie de Bloom réalisée par Anderson et Krathwohl (2001), qui distingue six niveaux : se souvenir, comprendre, appliquer, analyser, évaluer et créer.
+
+Référence :
+Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing: A Revision of Bloom’s Taxonomy of Educational Objectives. New York: Longman."""@fr ,
+                        """A hierarchical classification of cognitive processes involved in learning, describing the progression of mental abilities from remembering to creating. This taxonomy is based on the revised version of Bloom’s taxonomy by Anderson and Krathwohl (2001), which identifies six levels: remember, understand, apply, analyze, evaluate, and create.
+
+Reference:
+Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing: A Revision of Bloom’s Taxonomy of Educational Objectives. New York: Longman.""" .
 
 
 ###  http://w3id.org/cylo/ont#ComplexityLevel
@@ -1097,7 +1131,25 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#analyzing
 :analyzing rdf:type owl:NamedIndividual ,
-                    :Cognition .
+                    :Cognition ;
+           rdfs:comment """Fourth level (4/6) of the revised cognitive taxonomy: ability to break a whole into parts, discern relationships among them, and distinguish facts, inferences, and intentions. This level promotes critical thinking.
+
+Action verbs (EN) : differentiate, organize, attribute, compare, contrast, infer.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@en ,
+                        """Quatrième niveau (4/6) de la taxonomie de cognition révisée : capacité à décomposer un tout en ses parties, à discerner les relations entre elles et à distinguer les faits, les inférences et les intentions. Ce niveau favorise la pensée critique.
+
+Verbes d’action (FR) : distinguer, structurer, catégoriser, comparer, déduire, relier.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@fr ,
+                        """Fourth level (4/6) of the revised cognitive taxonomy: ability to break a whole into parts, discern relationships among them, and distinguish facts, inferences, and intentions. This level promotes critical thinking.
+
+Action verbs (EN) : differentiate, organize, attribute, compare, contrast, infer.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman.""" ;
+           rdfs:label "Analyser"@fr ,
+                      "Analyzing"@en ,
+                      "Analyzing" .
 
 
 ###  http://w3id.org/cylo/ont#anatomicalDissection
@@ -1108,7 +1160,25 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#applying
 :applying rdf:type owl:NamedIndividual ,
-                   :Cognition .
+                   :Cognition ;
+          rdfs:comment """Third level (3/6) of the revised cognitive taxonomy: the ability to use knowledge, methods, or procedures in new or familiar situations. This level reflects the practical implementation of learned knowledge.
+
+Action verbs (EN) : use, demonstrate, implement, execute, solve.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@en ,
+                       """Troisième niveau (3/6) de la taxonomie de cognition révisée : capacité à utiliser des connaissances, méthodes ou procédures dans des situations nouvelles ou familières. Ce niveau traduit la mise en œuvre concrète des apprentissages.
+
+Verbes d’action (FR) : utiliser, démontrer, mettre en œuvre, exécuter, résoudre.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@fr ,
+                       """Third level (3/6) of the revised cognitive taxonomy: the ability to use knowledge, methods, or procedures in new or familiar situations. This level reflects the practical implementation of learned knowledge.
+
+Action verbs (EN) : use, demonstrate, implement, execute, solve.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman.""" ;
+          rdfs:label "Appliquer"@fr ,
+                     "Applying"@en ,
+                     "Applying" .
 
 
 ###  http://w3id.org/cylo/ont#automatedFeedback
@@ -1148,7 +1218,25 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#creating
 :creating rdf:type owl:NamedIndividual ,
-                   :Cognition .
+                   :Cognition ;
+          rdfs:comment """Sixième niveau (6/6) de la taxonomie de cognition révisée : capacité à assembler des éléments pour produire un plan, un produit ou une perspective originale. Ce niveau mobilise la créativité, la synthèse et la pensée divergente.
+
+Verbes d’action (FR) : concevoir, planifier, formuler, inventer, produire, composer, dessiner.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@fr ,
+                       """Sixth level (6/6) of the revised cognitive taxonomy: ability to put elements together to form an original plan, product, or perspective. This level involves creativity, synthesis, and divergent thinking.
+
+Action verbs (EN) : design, plan, formulate, invent, produce, compose, draw.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@en ,
+                       """Sixth level (6/6) of the revised cognitive taxonomy: ability to put elements together to form an original plan, product, or perspective. This level involves creativity, synthesis, and divergent thinking.
+
+Action verbs (EN) : design, plan, formulate, invent, produce, compose, draw.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman.""" ;
+          rdfs:label "Creating"@en ,
+                     "Créer"@fr ,
+                     "Creating" .
 
 
 ###  http://w3id.org/cylo/ont#creation
@@ -1178,7 +1266,25 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#evaluating
 :evaluating rdf:type owl:NamedIndividual ,
-                     :Cognition .
+                     :Cognition ;
+            rdfs:comment """Cinquième niveau (5/6) de la taxonomie de cognition révisée : capacité à porter des jugements fondés sur des critères, à vérifier la cohérence ou la pertinence d’un raisonnement, et à justifier une décision ou une position.
+
+Verbes d’action (FR) : juger, critiquer, valider, justifier, argumenter, prioriser.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@fr ,
+                         """Fifth level (5/6) of the revised cognitive taxonomy: ability to make judgments using criteria, check the coherence or relevance of reasoning, and justify a decision or position.
+
+Action verbs (EN) : judge, critique, validate, justify, argue, prioritize.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@en ,
+                         """Fifth level (5/6) of the revised cognitive taxonomy: ability to make judgments using criteria, check the coherence or relevance of reasoning, and justify a decision or position.
+
+Action verbs (EN) : judge, critique, validate, justify, argue, prioritize.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman.""" ;
+            rdfs:label "Evaluating"@en ,
+                       "Évaluer"@fr ,
+                       "Evaluating" .
 
 
 ###  http://w3id.org/cylo/ont#excused
@@ -1398,7 +1504,22 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#remembering
 :remembering rdf:type owl:NamedIndividual ,
-                      :Cognition .
+                      :Cognition ;
+             rdfs:comment "Action verbs (EN) : define, list, name, identify, recall, describe."@en ,
+                          """First level (1/6) of the revised cognitive taxonomy: the ability to retrieve, recognize, or recall learned information.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing… New York: Longman."""@en ,
+                          """Premier niveau (1/6) de la taxonomie de cognition révisée : capacité à récupérer, reconnaître ou rappeler des informations apprises.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing… New York: Longman."""@fr ,
+                          "Verbes d’action (FR) : définir, lister, nommer, identifier, rappeler, décrire."@fr ,
+                          "Action verbs (EN) : define, list, name, identify, recall, describe." ,
+                          """First level (1/6) of the revised cognitive taxonomy: the ability to retrieve, recognize, or recall learned information.
+
+Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing… New York: Longman.""" ;
+             rdfs:label "Remembering"@en ,
+                        "Se souvenir"@fr ,
+                        "Remembering" .
 
 
 ###  http://w3id.org/cylo/ont#report
@@ -1463,7 +1584,25 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 
 ###  http://w3id.org/cylo/ont#understanding
 :understanding rdf:type owl:NamedIndividual ,
-                        :Cognition .
+                        :Cognition ;
+               rdfs:comment """Deuxième niveau (2/6) de la taxonomie de cognition révisée : capacité à interpréter, reformuler, comparer, résumer, expliquer ou illustrer un contenu. Ce niveau correspond à la construction de sens à partir de l’information reçue.
+
+Verbes d’action (FR) : expliquer, reformuler, résumer, illustrer, comparer, classer.
+
+Référence : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@fr ,
+                            """Second level (2/6) of the revised cognitive taxonomy: ability to interpret, paraphrase, compare, summarize, explain, or illustrate content. This level represents the construction of meaning from received information.
+
+Action verbs (EN) : explain, paraphrase, summarize, classify, illustrate, compare.
+
+Référence / Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman."""@en ,
+                            """Second level (2/6) of the revised cognitive taxonomy: ability to interpret, paraphrase, compare, summarize, explain, or illustrate content. This level represents the construction of meaning from received information.
+
+Action verbs (EN) : explain, paraphrase, summarize, classify, illustrate, compare.
+
+Référence / Reference : Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). A Taxonomy for Learning, Teaching, and Assessing. New York: Longman.""" ;
+               rdfs:label "Comprendre"@fr ,
+                          "Understanding"@en ,
+                          "Understanding" .
 
 
 ###  http://w3id.org/cylo/ont#valuing
