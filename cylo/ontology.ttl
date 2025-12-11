@@ -152,11 +152,32 @@ xsd:duration rdf:type rdfs:Datatype .
          rdfs:range :PedagogicalStep .
 
 
+###  http://w3id.org/cylo/ont#hasGivenAnswers
+:hasGivenAnswers rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasGeneratedBy> ;
+                 rdfs:domain :EvaluationActivity ;
+                 rdfs:range :Answers .
+
+
+###  http://w3id.org/cylo/ont#hasGrade
+:hasGrade rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAttributedTo> ;
+          rdfs:domain :Grade ;
+          rdfs:range <http://www.w3.org/ns/prov#Person> .
+
+
 ###  http://w3id.org/cylo/ont#hasParticipationSetting
 :hasParticipationSetting rdf:type owl:ObjectProperty ;
                          rdfs:subPropertyOf :wasClassifiedAs ;
                          rdfs:domain :PedagogicalScenario ;
                          rdfs:range :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#individualParticipationIn
+:individualParticipationIn rdf:type owl:ObjectProperty ;
+                           rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInformedBy> ;
+                           rdfs:domain :TakingExamActivity ;
+                           rdfs:range :EvaluationActivity .
 
 
 ###  http://w3id.org/cylo/ont#measuredLearningOutcome
@@ -190,6 +211,12 @@ xsd:duration rdf:type rdfs:Datatype .
                         "Links a feedback to an activity such as learning activity or an Entity like a resource it refers to." .
 
 
+###  http://w3id.org/cylo/ont#reflectedPerformanceDuring
+:reflectedPerformanceDuring rdf:type owl:ObjectProperty ;
+                            rdfs:domain :Grade ;
+                            rdfs:range :EvaluationActivity .
+
+
 ###  http://w3id.org/cylo/ont#wasAbout
 :wasAbout rdf:type owl:ObjectProperty ;
           rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
@@ -212,6 +239,20 @@ xsd:duration rdf:type rdfs:Datatype .
                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInformedBy> ;
                 rdfs:domain :EvaluationActivity ;
                 rdfs:range :TeachingActivity .
+
+
+###  http://w3id.org/cylo/ont#wasAnAnswerToQuestion
+:wasAnAnswerToQuestion rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                       rdfs:domain :Answers ;
+                       rdfs:range :EvaluationQuestion .
+
+
+###  http://w3id.org/cylo/ont#wasAssessedBy
+:wasAssessedBy rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInformedBy> ;
+               rdfs:domain :EvaluationActivity ;
+               rdfs:range :AssessmentActivity .
 
 
 ###  http://w3id.org/cylo/ont#wasAtteinedBy
@@ -381,6 +422,12 @@ xsd:duration rdf:type rdfs:Datatype .
                                "enrollmentStatus is a datatype property that specifies the administrative state of an enrollment within an institutional or educational entity. It allows tracking the current status of an enrollment process, indicating whether it is active, pending, completed, canceled, or any other relevant state." .
 
 
+###  http://w3id.org/cylo/ont#evaluator
+:evaluator rdf:type owl:DatatypeProperty ;
+           rdfs:domain :AssessmentActivity ;
+           rdfs:range xsd:string .
+
+
 ###  http://w3id.org/cylo/ont#hours
 :hours rdf:type owl:DatatypeProperty ;
        rdfs:subPropertyOf :duration ;
@@ -474,6 +521,12 @@ The value must not contain directly identifying information (such as name, stude
                                         )
                           ] ;
               rdfs:range xsd:dateTime .
+
+
+###  http://w3id.org/cylo/ont#scoreValue
+:scoreValue rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Grade ;
+            rdfs:range xsd:float .
 
 
 ###  http://w3id.org/cylo/ont#seconds
@@ -959,6 +1012,11 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
                      rdfs:subClassOf :Assignment .
 
 
+###  http://w3id.org/cylo/ont#PracticalEvaluationActivity
+:PracticalEvaluationActivity rdf:type owl:Class ;
+                             rdfs:subClassOf :EvaluationActivity .
+
+
 ###  http://w3id.org/cylo/ont#PracticalModality
 :PracticalModality rdf:type owl:Class ;
                    rdfs:subClassOf :EvaluationModality .
@@ -1088,6 +1146,11 @@ While it may include scheduled dates (:scheduledFor) indicating when the plan is
 ###  http://w3id.org/cylo/ont#TextDocument
 :TextDocument rdf:type owl:Class ;
               rdfs:subClassOf :Resource .
+
+
+###  http://w3id.org/cylo/ont#TheoriticalEvaluationActivity
+:TheoriticalEvaluationActivity rdf:type owl:Class ;
+                               rdfs:subClassOf :EvaluationActivity .
 
 
 ###  http://w3id.org/cylo/ont#University
