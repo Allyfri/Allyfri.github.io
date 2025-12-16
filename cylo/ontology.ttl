@@ -94,6 +94,13 @@ xsd:duration rdf:type rdfs:Datatype .
                                     "Links a feedback provision activity to the agent responsible for providing the feedback." .
 
 
+###  http://w3id.org/cylo/ont#gradeGivenTo
+:gradeGivenTo rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAttributedTo> ;
+              rdfs:domain :Grade ;
+              rdfs:range <http://www.w3.org/ns/prov#Person> .
+
+
 ###  http://w3id.org/cylo/ont#hadCourseChapter
 :hadCourseChapter rdf:type owl:ObjectProperty ;
                   rdfs:subPropertyOf <http://www.w3.org/ns/prov#hadMember> ;
@@ -159,18 +166,17 @@ xsd:duration rdf:type rdfs:Datatype .
                  rdfs:range :Answers .
 
 
-###  http://w3id.org/cylo/ont#hasGrade
-:hasGrade rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAttributedTo> ;
-          rdfs:domain :Grade ;
-          rdfs:range <http://www.w3.org/ns/prov#Person> .
-
-
 ###  http://w3id.org/cylo/ont#hasParticipationSetting
 :hasParticipationSetting rdf:type owl:ObjectProperty ;
                          rdfs:subPropertyOf :wasClassifiedAs ;
                          rdfs:domain :PedagogicalScenario ;
                          rdfs:range :ParticipationSetting .
+
+
+###  http://w3id.org/cylo/ont#hasPresenceNotedAs
+:hasPresenceNotedAs rdf:type owl:ObjectProperty ;
+                    rdfs:domain <http://www.w3.org/ns/prov#Association> ;
+                    rdfs:range :Presence .
 
 
 ###  http://w3id.org/cylo/ont#individualParticipationIn
@@ -348,12 +354,6 @@ xsd:duration rdf:type rdfs:Datatype .
               rdfs:range <http://www.w3.org/ns/prov#Organization> .
 
 
-###  http://w3id.org/cylo/ont#wasPresent
-:wasPresent rdf:type owl:ObjectProperty ;
-            rdfs:domain :ParticipationInEvaluationActivity ;
-            rdfs:range :Presence .
-
-
 ###  http://w3id.org/cylo/ont#wasValidatedBy
 :wasValidatedBy rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInfluencedBy> ;
@@ -378,6 +378,16 @@ xsd:duration rdf:type rdfs:Datatype .
 #################################################################
 #    Data properties
 #################################################################
+
+###  http://w3id.org/cylo/ont#academicYear
+:academicYear rdf:type owl:DatatypeProperty ;
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                          <http://www.w3.org/ns/prov#Entity>
+                                        )
+                          ] ;
+              rdfs:range xsd:string .
+
 
 ###  http://w3id.org/cylo/ont#academicYears
 :academicYears rdf:type owl:DatatypeProperty ;
@@ -422,12 +432,6 @@ xsd:duration rdf:type rdfs:Datatype .
                                "enrollmentStatus is a datatype property that specifies the administrative state of an enrollment within an institutional or educational entity. It allows tracking the current status of an enrollment process, indicating whether it is active, pending, completed, canceled, or any other relevant state." .
 
 
-###  http://w3id.org/cylo/ont#evaluator
-:evaluator rdf:type owl:DatatypeProperty ;
-           rdfs:domain :AssessmentActivity ;
-           rdfs:range xsd:string .
-
-
 ###  http://w3id.org/cylo/ont#hours
 :hours rdf:type owl:DatatypeProperty ;
        rdfs:subPropertyOf :duration ;
@@ -452,6 +456,16 @@ xsd:duration rdf:type rdfs:Datatype .
          rdfs:subPropertyOf :duration ;
          rdfs:domain <http://www.w3.org/ns/prov#Activity> ;
          rdfs:range xsd:decimal .
+
+
+###  http://w3id.org/cylo/ont#month
+:month rdf:type owl:DatatypeProperty ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                   <http://www.w3.org/ns/prov#Entity>
+                                 )
+                   ] ;
+       rdfs:range xsd:string .
 
 
 ###  http://w3id.org/cylo/ont#months
@@ -487,6 +501,12 @@ xsd:duration rdf:type rdfs:Datatype .
                  rdfs:range xsd:decimal .
 
 
+###  http://w3id.org/cylo/ont#presenceCode
+:presenceCode rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Presence ;
+              rdfs:range xsd:string .
+
+
 ###  http://w3id.org/cylo/ont#pseudonymizedID
 :pseudonymizedID rdf:type owl:DatatypeProperty ;
                  rdfs:domain <http://www.w3.org/ns/prov#Person> ;
@@ -500,6 +520,16 @@ The value must not contain directly identifying information (such as name, stude
                  rdfs:label "ID Pseudonymisé"@fr ,
                             "Pseudonymized ID"@en ,
                             "Pseudonymized ID" .
+
+
+###  http://w3id.org/cylo/ont#quadrimester
+:quadrimester rdf:type owl:DatatypeProperty ;
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                          <http://www.w3.org/ns/prov#Entity>
+                                        )
+                          ] ;
+              rdfs:range xsd:string .
 
 
 ###  http://w3id.org/cylo/ont#quadrimesters
